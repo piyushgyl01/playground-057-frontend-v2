@@ -1,16 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Form, Button, Badge, Spinner, Alert } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { jobsAPI } from '../../services/api';
+import React, { useState, useEffect } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
+  Badge,
+  Spinner,
+  Alert,
+} from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { jobsAPI } from "../services/api";
 
 const JobList = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
-    jobType: 'all',
-    location: 'all'
+    jobType: "all",
+    location: "all",
   });
 
   useEffect(() => {
@@ -20,7 +30,7 @@ const JobList = () => {
         const res = await jobsAPI.getJobs();
         setJobs(res.data);
       } catch (err) {
-        setError('Failed to fetch jobs');
+        setError("Failed to fetch jobs");
         console.error(err);
       } finally {
         setLoading(false);
@@ -31,21 +41,26 @@ const JobList = () => {
   }, []);
 
   // Get unique locations for filter dropdown
-  const locations = ['all', ...new Set(jobs.map(job => 
-    job.location.split(',')[0].trim())
-  )];
+  const locations = [
+    "all",
+    ...new Set(jobs.map((job) => job.location.split(",")[0].trim())),
+  ];
 
   // Filter jobs based on search term and filters
-  const filteredJobs = jobs.filter(job => {
-    const matchesSearch = 
-      job.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      job.company.toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const filteredJobs = jobs.filter((job) => {
+    const matchesSearch =
+      job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
       job.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
-    
-    const matchesJobType = filters.jobType === 'all' || job.jobType === filters.jobType;
-    const matchesLocation = filters.location === 'all' || job.location.includes(filters.location);
-    
+      job.skills.some((skill) =>
+        skill.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+    const matchesJobType =
+      filters.jobType === "all" || job.jobType === filters.jobType;
+    const matchesLocation =
+      filters.location === "all" || job.location.includes(filters.location);
+
     return matchesSearch && matchesJobType && matchesLocation;
   });
 
@@ -75,7 +90,9 @@ const JobList = () => {
             <Col md={3} className="mb-3 mb-md-0">
               <Form.Select
                 value={filters.jobType}
-                onChange={(e) => setFilters({ ...filters, jobType: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, jobType: e.target.value })
+                }
               >
                 <option value="all">All Job Types</option>
                 <option value="remote">Remote</option>
@@ -86,11 +103,13 @@ const JobList = () => {
             <Col md={3}>
               <Form.Select
                 value={filters.location}
-                onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, location: e.target.value })
+                }
               >
-                {locations.map(location => (
+                {locations.map((location) => (
                   <option key={location} value={location}>
-                    {location === 'all' ? 'All Locations' : location}
+                    {location === "all" ? "All Locations" : location}
                   </option>
                 ))}
               </Form.Select>
@@ -104,11 +123,11 @@ const JobList = () => {
       {filteredJobs.length === 0 ? (
         <Alert variant="info">
           No jobs match your search criteria. Try adjusting your filters.
-          <Button 
-            variant="link" 
+          <Button
+            variant="link"
             onClick={() => {
-              setSearchTerm('');
-              setFilters({ jobType: 'all', location: 'all' });
+              setSearchTerm("");
+              setFilters({ jobType: "all", location: "all" });
             }}
           >
             Clear all filters
@@ -116,46 +135,49 @@ const JobList = () => {
         </Alert>
       ) : (
         <Row>
-          {filteredJobs.map(job => (
+          {filteredJobs.map((job) => (
             <Col key={job._id} lg={4} md={6} className="mb-4">
               <Card className="h-100 shadow-sm job-card">
                 <Card.Body>
                   <div className="d-flex justify-content-between align-items-start mb-2">
                     <Card.Title>{job.title}</Card.Title>
-                    <Badge 
+                    <Badge
                       bg={
-                        job.jobType === 'remote' ? 'success' : 
-                        job.jobType === 'onsite' ? 'primary' : 
-                        'warning'
+                        job.jobType === "remote"
+                          ? "success"
+                          : job.jobType === "onsite"
+                          ? "primary"
+                          : "warning"
                       }
                     >
-                      {job.jobType.charAt(0).toUpperCase() + job.jobType.slice(1)}
+                      {job.jobType.charAt(0).toUpperCase() +
+                        job.jobType.slice(1)}
                     </Badge>
                   </div>
-                  
+
                   <Card.Subtitle className="mb-2 text-muted">
                     {job.company}
                   </Card.Subtitle>
-                  
+
                   <p className="small text-muted mb-2">
                     <i className="bi bi-geo-alt me-1"></i> {job.location}
                   </p>
-                  
+
                   {job.salary && (
                     <p className="small mb-2">
                       <i className="bi bi-cash me-1"></i> {job.salary}
                     </p>
                   )}
-                  
+
                   <Card.Text className="mb-3 text-truncate">
                     {job.description}
                   </Card.Text>
-                  
+
                   <div className="mb-3">
-                    {job.skills.slice(0, 4).map(skill => (
-                      <Badge 
-                        key={skill} 
-                        bg="light" 
+                    {job.skills.slice(0, 4).map((skill) => (
+                      <Badge
+                        key={skill}
+                        bg="light"
                         text="dark"
                         className="me-1 mb-1"
                       >
@@ -168,10 +190,10 @@ const JobList = () => {
                       </Badge>
                     )}
                   </div>
-                  
+
                   <div className="d-grid">
-                    <Link 
-                      to={`/jobs/${job._id}`} 
+                    <Link
+                      to={`/jobs/${job._id}`}
                       className="btn btn-outline-primary btn-sm"
                     >
                       View Details

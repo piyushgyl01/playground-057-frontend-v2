@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Badge, Spinner, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { profileAPI, jobsAPI } from '../../services/api';
-import { useAuth } from '../../contexts/AuthContext';
+import { profileAPI, jobsAPI } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 
 const Dashboard = () => {
   const { currentUser } = useAuth();

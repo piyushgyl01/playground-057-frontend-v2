@@ -1,12 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Badge, Spinner, Alert } from 'react-bootstrap';
-import { useParams, Link } from 'react-router-dom';
-import { jobsAPI } from '../../services/api';
+import React, { useState, useEffect } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Badge,
+  Spinner,
+  Alert,
+} from "react-bootstrap";
+import { useParams, Link } from "react-router-dom";
+import { jobsAPI } from "../services/api";
 
 const JobDetail = () => {
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const { id } = useParams();
 
   useEffect(() => {
@@ -16,7 +25,7 @@ const JobDetail = () => {
         const res = await jobsAPI.getJobById(id);
         setJob(res.data);
       } catch (err) {
-        setError('Failed to fetch job details');
+        setError("Failed to fetch job details");
         console.error(err);
       } finally {
         setLoading(false);
@@ -65,11 +74,13 @@ const JobDetail = () => {
               <h2 className="mb-1">{job.title}</h2>
               <p className="text-muted mb-2">{job.company}</p>
               <div className="d-flex align-items-center">
-                <Badge 
+                <Badge
                   bg={
-                    job.jobType === 'remote' ? 'success' : 
-                    job.jobType === 'onsite' ? 'primary' : 
-                    'warning'
+                    job.jobType === "remote"
+                      ? "success"
+                      : job.jobType === "onsite"
+                      ? "primary"
+                      : "warning"
                   }
                   className="me-2"
                 >
@@ -101,10 +112,10 @@ const JobDetail = () => {
           <div className="mb-4">
             <h5>Required Skills</h5>
             <div>
-              {job.skills.map(skill => (
-                <Badge 
-                  key={skill} 
-                  bg="light" 
+              {job.skills.map((skill) => (
+                <Badge
+                  key={skill}
+                  bg="light"
                   text="dark"
                   className="me-2 mb-2 p-2"
                 >
@@ -119,9 +130,7 @@ const JobDetail = () => {
               <i className="bi bi-calendar me-1"></i>
               Posted on: {new Date(job.createdAt).toLocaleDateString()}
             </p>
-            <Button variant="primary">
-              Apply Now
-            </Button>
+            <Button variant="primary">Apply Now</Button>
           </div>
         </Card.Body>
       </Card>
