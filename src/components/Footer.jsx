@@ -1,5 +1,5 @@
-import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
 
 const Footer = () => {
   return (
@@ -14,7 +14,8 @@ const Footer = () => {
           </Col>
           <Col md={6} className="text-center text-md-end">
             <p className="text-muted small">
-              &copy; {new Date().getFullYear()} JobMatch AI. All rights reserved.
+              &copy; {new Date().getFullYear()} JobMatch AI. All rights
+              reserved.
             </p>
           </Col>
         </Row>
